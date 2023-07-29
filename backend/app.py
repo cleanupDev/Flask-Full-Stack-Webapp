@@ -10,5 +10,12 @@ def index():
                     }), 200
 
 
+@app.route('/<name>')
+def hello_name(name):
+    return jsonify({'status': 'success',
+                    'message': 'Hello {}'.format(name)
+                    }), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True)
