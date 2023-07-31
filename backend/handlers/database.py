@@ -1,8 +1,10 @@
 from flask import jsonify
 from handlers import connection
+import logging
 
 
 def init_db():
+    logging.info("Initializing database")
     try:
         conn = connection()
         cursor = conn.cursor()
@@ -26,6 +28,7 @@ def init_db():
 
         conn.commit()
 
+        logging.info("Database initialized successfully")
         return jsonify(
             {
                 "status": "success",
@@ -35,6 +38,7 @@ def init_db():
         ), 200
 
     except Exception as e:
+        logging.error("Error initializing database: " + str(e))
         return jsonify(
             {
                 "status": "error",

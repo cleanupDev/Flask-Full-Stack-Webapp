@@ -5,6 +5,7 @@ from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 from azure.core.exceptions import ResourceNotFoundError
 import os
+import logging
 
 
 class Config:
@@ -20,6 +21,8 @@ class Config:
 
 
 class DevelopmentConfig(Config):
+    logging.basicConfig(level=logging.DEBUG)
+    logging.info("Backend running in development mode")
     DEBUG = True
     # Either use .env file or environment variables in docker container
     DB_HOST = dotenv_values("backend/config/backend.env").get("DB_HOST") or os.environ.get("DB_HOST")
@@ -43,6 +46,8 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
+    logging.basicConfig(level=logging.INFO)
+    logging.info("Backend running in production mode")
     SECRET_KEY = os.environ.get("SECRET_KEY")
 
     def connection(self):

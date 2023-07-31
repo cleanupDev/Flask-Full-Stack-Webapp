@@ -1,5 +1,6 @@
 import os
 from dotenv import dotenv_values
+import logging
 
 
 class Config:
@@ -11,6 +12,8 @@ class Config:
     
     
 class DevelopmentConfig(Config):
+    logging.basicConfig(level=logging.DEBUG)
+    logging.info("Frontend running in development mode")
     DEBUG = True
     # Either use .env file or environment variables in docker container
     HOST = dotenv_values("frontend/config/frontend.env").get("HOST") or os.environ.get("HOST")
@@ -19,6 +22,8 @@ class DevelopmentConfig(Config):
     
     
 class ProductionConfig(Config):
+    logging.basicConfig(level=logging.INFO)
+    logging.info("Frontend running in production mode")
     DEBUG = False
     HOST = os.environ.get("HOST")
     PORT = os.environ.get("PORT")

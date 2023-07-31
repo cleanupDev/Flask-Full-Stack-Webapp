@@ -3,6 +3,7 @@ from flask import jsonify
 from flask_jwt_extended import create_access_token
 import uuid
 import datetime
+import logging
 from handlers import bcrypt, connection
 
 
@@ -35,6 +36,9 @@ def login_user(user: User):
                     is_verified=result[9],
                     is_authenticated=result[10],
                 )
+                
+                logging.debug("User logged in successfully")
+                
                 return (
                     jsonify(
                         {
@@ -50,6 +54,7 @@ def login_user(user: User):
                 )
 
             else:
+                logging.debug("Incorrect password")
                 return (
                     jsonify(
                         {
@@ -62,6 +67,7 @@ def login_user(user: User):
                     401,
                 )
         else:
+            logging.debug("Unknown username")
             return (
                 jsonify(
                     {
@@ -75,6 +81,7 @@ def login_user(user: User):
             )
 
     except Exception as e:
+        logging.error(str(e))
         return (
             jsonify(
                 {
@@ -106,7 +113,9 @@ def register_user(user: User):
         result = cursor.fetchone()
 
         if result:
+            logging.debug("Username or email already exists")
             if result[1] == user.username:
+                logging.debug("Username already exists")
                 return (
                     jsonify(
                         {
@@ -118,6 +127,7 @@ def register_user(user: User):
                     409,
                 )
             else:
+                logging.debug("Email already exists")
                 return (
                     jsonify(
                         {
@@ -130,6 +140,7 @@ def register_user(user: User):
                 )
 
         else:
+            logging.debug("Inserting user into database")
             cursor.execute(
                 """
                             INSERT INTO users (id, username, password, email, first_name, last_name, created_at, is_active, is_admin, is_verified, is_authenticated)
@@ -152,6 +163,7 @@ def register_user(user: User):
 
             conn.commit()
 
+            logging.debug("User registered successfully")
             return (
                 jsonify(
                     {
@@ -164,6 +176,7 @@ def register_user(user: User):
             )
 
     except Exception as e:
+        logging.error(str(e))
         return jsonify({"status": "error", "message": str(e), "data": None}), 500
 
     finally:
@@ -172,6 +185,7 @@ def register_user(user: User):
 
 def get_user_by_id(user: User):
     try:
+        logging.debug("Retrieving fresh userdata from database for {user.username}}")
         conn = connection()
         cursor = conn.cursor()
 
@@ -185,6 +199,7 @@ def get_user_by_id(user: User):
         result = cursor.fetchone()
 
         if result:
+            logging.debug("User retrieved successfully")
             return (
                 jsonify(
                     {
@@ -209,6 +224,7 @@ def get_user_by_id(user: User):
             )
 
         else:
+            logging.error("User not found")
             return (
                 jsonify(
                     {
@@ -221,6 +237,7 @@ def get_user_by_id(user: User):
             )
 
     except Exception as e:
+        logging.error(str(e))
         return jsonify({"status": "error", "message": str(e), "data": None}), 500
 
     finally:
