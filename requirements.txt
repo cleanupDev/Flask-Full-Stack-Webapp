@@ -2,3 +2,9 @@ Flask
 Flask-Login
 python-dotenv
 mysql-connector-python
+pyodbc
+azure-identity
+azure-keyvault
+Bcrypt-Flask
+Flask-JWT-Extended
+flask-cors
