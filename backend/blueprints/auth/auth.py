@@ -1,8 +1,8 @@
 from flask import Blueprint, request
 from models.user import User
-from handlers.user_handlers import login_user, register_user
+from handlers import login_user, register_user
 
-auth_bp = Blueprint("auth", __name__, template_folder="templates")
+auth_bp = Blueprint("auth", __name__)
 
 
 @auth_bp.route("/login", methods=["POST"])

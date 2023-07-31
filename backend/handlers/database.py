@@ -1,5 +1,5 @@
-from handlers.connection import connection
 from flask import jsonify
+from handlers import connection
 
 
 def init_db():
@@ -10,7 +10,7 @@ def init_db():
         cursor.execute(
             """
                        CREATE TABLE IF NOT EXISTS users (
-                           id INT NOT NULL UNIQUE,
+                            id CHAR(36) NOT NULL UNIQUE,
                             username VARCHAR(255) NOT NULL UNIQUE,
                             password VARCHAR(255) NOT NULL,
                             email VARCHAR(255) NOT NULL UNIQUE,
@@ -20,7 +20,7 @@ def init_db():
                             is_active BOOLEAN NOT NULL,
                             is_admin BOOLEAN NOT NULL,
                             is_verified BOOLEAN NOT NULL,
-                            is_authenticated BOOLEAN NOT NULL,
+                            is_authenticated BOOLEAN NOT NULL
                        )"""
         )
 

@@ -1,6 +1,6 @@
 import pyodbc
 import mysql.connector as mysql
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 from azure.core.exceptions import ResourceNotFoundError
@@ -14,18 +14,17 @@ class Config:
     DB_USER = "default_user"
     DB_PASSWORD = "default_password"
     DB_NAME = "default_db"
+    CORS_ORIGINS = ["http://localhost:3000", "http://localhost:5000"]
 
 
 class DevelopmentConfig(Config):
-    def __init__(self):
-        load_dotenv()
-        
     DEBUG = True
-    DB_HOST = os.environ.get("DB_HOST")
-    DB_USER = os.environ.get("DB_USER")
-    DB_PASSWORD = os.environ.get("DB_PASSWORD")
-    DB_NAME = os.environ.get("DB_NAME")
-
+    DB_HOST = dotenv_values("backend/config/backend.env").get("DB_HOST")
+    DB_USER = dotenv_values("backend/config/backend.env").get("DB_USER")
+    DB_PASSWORD = dotenv_values("backend/config/backend.env").get("DB_PASSWORD")
+    DB_NAME = dotenv_values("backend/config/backend.env").get("DB_NAME")
+    # CORS_ORIGINS = dotenv_values("backend/config/backend.env").get("CORS_ORIGINS")
+    
     def connection(self):
         try:
             return mysql.connect(

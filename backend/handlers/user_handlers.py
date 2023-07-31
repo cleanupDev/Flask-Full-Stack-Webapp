@@ -1,10 +1,9 @@
-from handlers.connection import connection
 from models.user import User
-from app import bcrypt
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 import uuid
 import datetime
+from handlers import bcrypt, connection
 
 
 def login_user(user: User):
@@ -28,11 +27,13 @@ def login_user(user: User):
                     username=result[1],
                     # password=result[2],
                     email=result[3],
-                    created_at=result[4],
-                    is_active=result[5],
-                    is_admin=result[6],
-                    is_verified=result[7],
-                    is_authenticated=result[8],
+                    first_name=result[4],
+                    last_name=result[5],
+                    created_at=result[6],
+                    is_active=result[7],
+                    is_admin=result[8],
+                    is_verified=result[9],
+                    is_authenticated=result[10],
                 )
                 return (
                     jsonify(
@@ -135,7 +136,7 @@ def register_user(user: User):
                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                                 """,
                 (
-                    uuid.uuid4(),
+                    str(uuid.uuid4()),
                     user.username,
                     bcrypt.generate_password_hash(user.password),
                     user.email,

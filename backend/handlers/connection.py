@@ -1,12 +1,12 @@
-from config.config import get_config
 from flask import jsonify
+from handlers import get_config
 
-CONNECTION = get_config().connection()
+CONFIG = get_config()
 
 
 def connection():
     """Get database connection"""
-    return CONNECTION
+    return CONFIG.connection()
 
 
 def ping():

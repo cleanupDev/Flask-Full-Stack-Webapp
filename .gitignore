@@ -3,4 +3,5 @@
 venv/
 .env
 *.env
-
+.data/
+__pycache__/
