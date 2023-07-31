@@ -12,9 +12,10 @@ class Config:
     
 class DevelopmentConfig(Config):
     DEBUG = True
-    HOST = dotenv_values("frontend/config/frontend.env").get("HOST")
-    PORT = dotenv_values("frontend/config/frontend.env").get("PORT")
-    BACKEND_URL = dotenv_values("frontend/config/frontend.env").get("BACKEND_URL")
+    # Either use .env file or environment variables in docker container
+    HOST = dotenv_values("frontend/config/frontend.env").get("HOST") or os.environ.get("HOST")
+    PORT = dotenv_values("frontend/config/frontend.env").get("PORT") or os.environ.get("PORT")
+    BACKEND_URL = dotenv_values("frontend/config/frontend.env").get("BACKEND_URL") or os.environ.get("BACKEND_URL")
     
     
 class ProductionConfig(Config):

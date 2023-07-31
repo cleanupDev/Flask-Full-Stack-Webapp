@@ -16,17 +16,18 @@ class Config:
     DB_NAME = "default_db"
     HOST = "localhost"
     PORT = 5001
-    CORS_ORIGINS = ["http://localhost:3000", "http://localhost:5000"]
+    CORS_ORIGINS = ["http://localhost:5000", "http://localhost:5001"]
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    DB_HOST = dotenv_values("backend/config/backend.env").get("DB_HOST")
-    DB_USER = dotenv_values("backend/config/backend.env").get("DB_USER")
-    DB_PASSWORD = dotenv_values("backend/config/backend.env").get("DB_PASSWORD")
-    DB_NAME = dotenv_values("backend/config/backend.env").get("DB_NAME")
-    HOST = dotenv_values("backend/config/backend.env").get("HOST")
-    PORT = dotenv_values("backend/config/backend.env").get("PORT")
+    # Either use .env file or environment variables in docker container
+    DB_HOST = dotenv_values("backend/config/backend.env").get("DB_HOST") or os.environ.get("DB_HOST")
+    DB_USER = dotenv_values("backend/config/backend.env").get("DB_USER") or os.environ.get("DB_USER")
+    DB_PASSWORD = dotenv_values("backend/config/backend.env").get("DB_PASSWORD") or os.environ.get("DB_PASSWORD")
+    DB_NAME = dotenv_values("backend/config/backend.env").get("DB_NAME") or os.environ.get("DB_NAME")
+    HOST = dotenv_values("backend/config/backend.env").get("HOST") or os.environ.get("HOST")
+    PORT = dotenv_values("backend/config/backend.env").get("PORT") or os.environ.get("PORT")
     # CORS_ORIGINS = dotenv_values("backend/config/backend.env").get("CORS_ORIGINS")
     
     def connection(self):
@@ -66,7 +67,7 @@ class ProductionConfig(Config):
             raise Exception("Error connecting to database: " + str(e))
 
 
-def get_config(environment=os.environ.get("ENVIRONMENT", "development")):
+def get_config(environment=os.environ.get("FLASK_ENV", "development")):
     if environment == "production":
         return ProductionConfig()
     else:
