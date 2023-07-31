@@ -8,3 +8,5 @@ azure-keyvault
 Bcrypt-Flask
 Flask-JWT-Extended
 flask-cors
+cachetools
+requests

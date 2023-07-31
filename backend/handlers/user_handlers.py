@@ -168,3 +168,60 @@ def register_user(user: User):
 
     finally:
         conn.close()
+
+
+def get_user_by_id(user: User):
+    try:
+        conn = connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+                        SELECT * FROM users WHERE id = %s
+                            """,
+            (user.id,),
+        )
+
+        result = cursor.fetchone()
+
+        if result:
+            return (
+                jsonify(
+                    {
+                        "status": "success",
+                        "message": "User retrieved successfully",
+                        "data": User(
+                            id=result[0],
+                            username=result[1],
+                            # password=result[2],
+                            email=result[3],
+                            first_name=result[4],
+                            last_name=result[5],
+                            created_at=result[6],
+                            is_active=result[7],
+                            is_admin=result[8],
+                            is_verified=result[9],
+                            is_authenticated=result[10],
+                        ).to_dict(),
+                    }
+                ),
+                200,
+            )
+
+        else:
+            return (
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "User not found",
+                        "data": None,
+                    }
+                ),
+                404,
+            )
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e), "data": None}), 500
+
+    finally:
+        conn.close()

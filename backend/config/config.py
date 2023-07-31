@@ -14,6 +14,8 @@ class Config:
     DB_USER = "default_user"
     DB_PASSWORD = "default_password"
     DB_NAME = "default_db"
+    HOST = "localhost"
+    PORT = 5001
     CORS_ORIGINS = ["http://localhost:3000", "http://localhost:5000"]
 
 
@@ -23,6 +25,8 @@ class DevelopmentConfig(Config):
     DB_USER = dotenv_values("backend/config/backend.env").get("DB_USER")
     DB_PASSWORD = dotenv_values("backend/config/backend.env").get("DB_PASSWORD")
     DB_NAME = dotenv_values("backend/config/backend.env").get("DB_NAME")
+    HOST = dotenv_values("backend/config/backend.env").get("HOST")
+    PORT = dotenv_values("backend/config/backend.env").get("PORT")
     # CORS_ORIGINS = dotenv_values("backend/config/backend.env").get("CORS_ORIGINS")
     
     def connection(self):
