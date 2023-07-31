@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, request, render_template, session
 from flask_login import login_user, login_required, logout_user
 from models.user import User
 import requests
@@ -19,6 +19,7 @@ def login():
         
         if login_response.status_code == 200:
             login_user(User(**login_response.json()["data"]))
+            session["access_token"] = login_response.json()["access_token"]
             response = {
                 "status": login_response.json()["status"],
                 "message": login_response.json()["message"],
@@ -42,6 +43,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    session.pop("access_token", None)
     return jsonify({"status": "success", "message": "User logged out successfully"}), 200
 
 
