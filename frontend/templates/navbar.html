@@ -2,7 +2,7 @@
     <div class="navbar-container">
       <div class="logo">
         <a href="/">
-            <img src="{{url_for('static', filename='img/vw.svg')}}" alt="logo" width="50" heigh="50">
+            <img src="{{url_for('static', filename='img/test.svg')}}" alt="logo" width="50" heigh="50">
         </a>
       </div>
       <ul class="nav-links">
@@ -10,7 +10,6 @@
         <li><a {% if request.path == '/login' %}class="active"{% endif %} href="/login">Login</a></li>
         <li><a {% if request.path == '/register' %}class="active"{% endif %} href="/register">Register</a></li>
         <li><a {% if request.path == '/logout' %}class="active"{% endif %} href="/logout">Logout</a></li>
-        <li><a {% if request.path == '/init' %}class="active"{% endif %} href="/init">Init DB</a></li>
       </ul>
     </div>
     <link rel="stylesheet" href="{{url_for('static', filename='css/navbar.css')}}">

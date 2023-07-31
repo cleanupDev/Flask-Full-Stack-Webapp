@@ -14,15 +14,6 @@ def create_app():
     login_manager.init_app(app)
     login_manager.user_loader(load_user)
 
-    @app.after_request
-    def add_cors_headers(response):
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
-        response.headers["Access-Control-Allow-Methods"] = "GET,PUT,POST,DELETE"
-        response.headers["Access-Control-Allow-Credentials"] = "true"
-        return response
-
-
     from blueprints import auth_bp, home_bp
 
     app.register_blueprint(auth_bp)
