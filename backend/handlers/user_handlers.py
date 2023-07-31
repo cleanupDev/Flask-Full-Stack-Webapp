@@ -3,6 +3,8 @@ from models.user import User
 from app import bcrypt
 from flask import jsonify
 from flask_jwt_extended import create_access_token
+import uuid
+import datetime
 
 
 def login_user(user: User):
@@ -32,25 +34,57 @@ def login_user(user: User):
                     is_verified=result[7],
                     is_authenticated=result[8],
                 )
-                return jsonify({
-                    "status": "success",
-                    "message": "User logged in successfully",
-                    "data": logged_in_user.to_dict(),
-                    "access_token": create_access_token(identity=logged_in_user.username)
-                }), 200
+                return (
+                    jsonify(
+                        {
+                            "status": "success",
+                            "message": "User logged in successfully",
+                            "data": logged_in_user.to_dict(),
+                            "access_token": create_access_token(
+                                identity=logged_in_user.username
+                            ),
+                        }
+                    ),
+                    200,
+                )
 
             else:
-                return jsonify({
-                    "status": "error",
-                    "message": "Incorrect password",
-                    "data": None,
-                    "access_token": None
-                }), 401
+                return (
+                    jsonify(
+                        {
+                            "status": "error",
+                            "message": "Incorrect password",
+                            "data": None,
+                            "access_token": None,
+                        }
+                    ),
+                    401,
+                )
         else:
-            return jsonify({"status": "error", "message": "Unknown username", "data": None, "access_token": None}), 401
+            return (
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "Unknown username",
+                        "data": None,
+                        "access_token": None,
+                    }
+                ),
+                401,
+            )
 
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e), "data": None, "access_token": None}), 500
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": str(e),
+                    "data": None,
+                    "access_token": None,
+                }
+            ),
+            500,
+        )
 
     finally:
         conn.close()
@@ -72,34 +106,61 @@ def register_user(user: User):
 
         if result:
             if result[1] == user.username:
-                return jsonify({
-                    "status": "error",
-                    "message": "Username already exists",
-                    "data": None,
-                }), 409
+                return (
+                    jsonify(
+                        {
+                            "status": "error",
+                            "message": "Username already exists",
+                            "data": None,
+                        }
+                    ),
+                    409,
+                )
             else:
-                return jsonify({
-                    "status": "error",
-                    "message": "Email already exists",
-                    "data": None,
-                }), 409
-           
+                return (
+                    jsonify(
+                        {
+                            "status": "error",
+                            "message": "Email already exists",
+                            "data": None,
+                        }
+                    ),
+                    409,
+                )
+
         else:
             cursor.execute(
                 """
-                            INSERT INTO users (username, password, email)
-                            VALUES (%s, %s, %s)
+                            INSERT INTO users (id, username, password, email, first_name, last_name, created_at, is_active, is_admin, is_verified, is_authenticated)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                                 """,
-                (user.username, bcrypt.generate_password_hash(user.password), user.email),
+                (
+                    uuid.uuid4(),
+                    user.username,
+                    bcrypt.generate_password_hash(user.password),
+                    user.email,
+                    user.first_name,
+                    user.last_name,
+                    datetime.datetime.now(),
+                    user.is_active,
+                    user.is_admin,
+                    user.is_verified,
+                    user.is_authenticated,
+                ),
             )
 
             conn.commit()
 
-            return jsonify({
-                "status": "success",
-                "message": "User registered successfully",
-                "data": None,
-            }), 201
+            return (
+                jsonify(
+                    {
+                        "status": "success",
+                        "message": "User registered successfully",
+                        "data": None,
+                    }
+                ),
+                201,
+            )
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e), "data": None}), 500

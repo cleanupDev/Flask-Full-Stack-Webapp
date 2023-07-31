@@ -5,6 +5,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
 from blueprints.config.config import config_bp
+from blueprints.auth.auth import auth_bp
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +15,7 @@ jwt = JWTManager(app)
 
 
 app.register_blueprint(config_bp)
+app.register_blueprint(auth_bp)
 
 
 
