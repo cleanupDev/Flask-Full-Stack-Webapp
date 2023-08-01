@@ -18,6 +18,30 @@ class Config:
     HOST = "localhost"
     PORT = 5001
     CORS_ORIGINS = ["http://localhost:5000", "http://localhost:5001"]
+    
+
+class UnittestConfig(Config):
+    logging.basicConfig(level=logging.DEBUG)
+    logging.info("Backend running in unittest mode")
+    DEBUG = True
+    DB_HOST = dotenv_values("backend/config/backend.env").get("DB_HOST") or os.environ.get("DB_HOST")
+    DB_USER = dotenv_values("backend/config/backend.env").get("DB_USER") or os.environ.get("DB_USER")
+    DB_PASSWORD = dotenv_values("backend/config/backend.env").get("DB_PASSWORD") or os.environ.get("DB_PASSWORD")
+    DB_NAME = dotenv_values("backend/config/backend.env").get("DB_NAME") or os.environ.get("DB_NAME")
+    HOST = dotenv_values("backend/config/backend.env").get("HOST") or os.environ.get("HOST")
+    PORT = dotenv_values("backend/config/backend.env").get("PORT") or os.environ.get("PORT")
+    # CORS_ORIGINS = dotenv_values("backend/config/backend.env").get("CORS_ORIGINS")
+    
+    def connection(self):
+        try:
+            return mysql.connect(
+                host=self.DB_HOST,
+                user=self.DB_USER,
+                password=self.DB_PASSWORD,
+                database=self.DB_NAME,
+            )
+        except Exception as e:
+            raise Exception("Error connecting to database: " + str(e))
 
 
 class DevelopmentConfig(Config):
@@ -75,5 +99,7 @@ class ProductionConfig(Config):
 def get_config(environment=os.environ.get("FLASK_ENV", "development")):
     if environment == "production":
         return ProductionConfig()
+    elif environment == "unittest":
+        return UnittestConfig()
     else:
         return DevelopmentConfig()
