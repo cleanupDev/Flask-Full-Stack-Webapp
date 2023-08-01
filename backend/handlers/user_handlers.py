@@ -46,7 +46,7 @@ def login_user(user: User):
                             "message": "User logged in successfully",
                             "data": logged_in_user.to_dict(),
                             "access_token": create_access_token(
-                                identity=logged_in_user.username
+                                identity=logged_in_user.id
                             ),
                         }
                     ),
@@ -183,9 +183,9 @@ def register_user(user: User):
         conn.close()
 
 
-def get_user_by_id(user: User):
+def get_user_by_id(user_id: str):
     try:
-        logging.debug("Retrieving fresh userdata from database for {user.username}}")
+        logging.debug(f"Retrieving fresh userdata from database for {user_id}")
         conn = connection()
         cursor = conn.cursor()
 
@@ -193,7 +193,7 @@ def get_user_by_id(user: User):
             """
                         SELECT * FROM users WHERE id = %s
                             """,
-            (user.id,),
+            (user_id,),
         )
 
         result = cursor.fetchone()

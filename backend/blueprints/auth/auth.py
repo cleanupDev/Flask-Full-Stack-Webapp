@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.user import User
 from handlers import login_user, register_user, get_user_by_id
 import logging
@@ -23,11 +23,11 @@ def register():
     return register_user(user)
 
 
-@auth_bp.route("/user", methods=["POST"])
+@auth_bp.route("/user", methods=["GET"])
 @jwt_required()
 def user():
-    user = User(**request.json["data"])
-    logging.debug("Getting user: " + user.username)
+    current_user_id = get_jwt_identity()
+    logging.debug("Getting user: " + str(current_user_id))
     
-    return get_user_by_id(user)
+    return get_user_by_id(current_user_id)
 
