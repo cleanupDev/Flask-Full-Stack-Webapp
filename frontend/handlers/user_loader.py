@@ -3,6 +3,7 @@ import os
 from cachetools import TTLCache
 from models.user import User
 from flask import session
+from flask_login import current_user
 from dotenv import dotenv_values
 import logging
 
@@ -26,7 +27,9 @@ def load_user(user_id):
 def _load_fresh_user(user_id):
     access_token = session.get("access_token", None)
     user = User(id=user_id)
-    user_response = requests.get(BACKEND_URL + "/user", headers={"Authorization": f"Bearer {access_token}"})
+    user_response = requests.get(
+        BACKEND_URL + "/user", headers={"Authorization": f"Bearer {access_token}"}
+    )
     if user_response.status_code == 200:
         user = User(**user_response.json()["data"])
         return user
@@ -34,5 +37,11 @@ def _load_fresh_user(user_id):
         return None
 
 
-def invalidate_user_cache():
+def remove_user_from_cache():
+    user_id = current_user.get_id()
+    if user_id in ttl_cache:
+        del ttl_cache[user_id]
+
+
+def invalidate_app_cache():
     ttl_cache.clear()

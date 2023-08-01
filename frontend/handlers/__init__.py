@@ -1,1 +1,1 @@
-from .user_loader import load_user, invalidate_user_cache
+from .user_loader import load_user, invalidate_app_cache, remove_user_from_cache

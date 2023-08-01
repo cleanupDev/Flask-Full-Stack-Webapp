@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, render_template, session
 from flask_login import login_user, login_required, logout_user
+from handlers import remove_user_from_cache
 from models.user import User
 import requests
 from dotenv import dotenv_values
@@ -42,6 +43,7 @@ def login():
 @auth_bp.route("/logout", methods=["GET"])
 @login_required
 def logout():
+    remove_user_from_cache()
     logout_user()
     session.pop("access_token", None)
     return jsonify({"status": "success", "message": "User logged out successfully"}), 200
