@@ -14,3 +14,8 @@ def index():
 @login_required
 def home():
     return render_template("home.html")
+
+
+@home_bp.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
