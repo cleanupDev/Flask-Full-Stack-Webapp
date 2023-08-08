@@ -30,17 +30,7 @@ MySQL database is run in a Docker container. To run the database, run the follow
 docker compose up -d
 ```
 
-To run the backend Flask app, run the following command:
-
-```bash
-python backend/app.py
-```
-
-To run the frontend Flask app, run the following command:
-
-```bash
-python frontend/app.py
-```
+TODO
 
 Visit `http://localhost:5000` in your browser to view the application.
 The backend API is available at `http://localhost:5001`.
