@@ -7,7 +7,9 @@ from flask_login import current_user
 from dotenv import dotenv_values
 import logging
 
-BACKEND_URL = dotenv_values("frontend/config/frontend.env").get("BACKEND_URL")
+BACKEND_URL = dotenv_values("frontend/config/frontend.env").get(
+    "BACKEND_URL"
+) or os.environ.get("BACKEND_URL")
 
 ttl_cache = TTLCache(maxsize=100, ttl=300)
 
@@ -26,7 +28,6 @@ def load_user(user_id):
 
 def _load_fresh_user(user_id):
     access_token = session.get("access_token", None)
-    user = User(id=user_id)
     user_response = requests.get(
         BACKEND_URL + "/user", headers={"Authorization": f"Bearer {access_token}"}
     )
