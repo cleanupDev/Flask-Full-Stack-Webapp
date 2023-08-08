@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models.user import User
+from models import User
 from handlers import login_user, register_user, get_user_by_id
 import logging
 
