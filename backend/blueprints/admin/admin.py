@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
-from handlers.connection import ping
-from handlers.database import init_db
-from handlers import login_user, register_user
+from backend.handlers.connection import ping
+from backend.handlers.database import init_db
+from backend.handlers import login_user, register_user
 from models import User
 from flask_jwt_extended import jwt_required
 

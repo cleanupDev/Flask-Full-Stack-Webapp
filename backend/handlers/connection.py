@@ -1,5 +1,5 @@
 from flask import jsonify
-from handlers import get_config
+from backend.handlers import get_config
 import logging
 
 CONFIG = get_config()

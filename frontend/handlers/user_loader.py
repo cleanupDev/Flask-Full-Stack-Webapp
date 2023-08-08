@@ -1,7 +1,7 @@
 import requests
 import os
 from cachetools import TTLCache
-from models.user import User
+from models import User
 from flask import session
 from flask_login import current_user
 from dotenv import dotenv_values

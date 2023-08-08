@@ -1,10 +1,10 @@
-from models.user import User
+from models import User
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 import uuid
 import datetime
 import logging
-from handlers import bcrypt, connection
+from backend.handlers import bcrypt, connection
 
 
 def login_user(user: User):
@@ -36,9 +36,9 @@ def login_user(user: User):
                     is_verified=result[9],
                     is_authenticated=result[10],
                 )
-                
+
                 logging.debug("User logged in successfully")
-                
+
                 return (
                     jsonify(
                         {

@@ -1,5 +1,5 @@
 from flask import jsonify
-from handlers import connection
+from backend.handlers import connection
 import logging
 
 
