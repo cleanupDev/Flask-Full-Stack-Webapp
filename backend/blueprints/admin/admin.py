@@ -35,6 +35,12 @@ def health():
     return jsonify({"status": "success", "message": "Server is healthy"}), 200
 
 
+"""
+! Test routes
+TODO: Remove these routes before production
+"""
+
+
 @admin_bp.route("/test_register", methods=["GET"])
 def test_register():
     test_user = User(
