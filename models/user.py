@@ -9,7 +9,6 @@ class User:
     is_active: bool = True
     is_admin: bool = False
     is_verified: bool = True  # TODO: change to appropriate default value
-    is_authenticated: bool = True  # TODO: change to appropriate default value
 
     username: Optional[str] = None
     id: Optional[int] = None
@@ -34,5 +33,4 @@ class User:
             "is_active": self.is_active,
             "is_admin": self.is_admin,
             "is_verified": self.is_verified,
-            "is_authenticated": self.is_authenticated,
         }
