@@ -1,3 +1,14 @@
+"""BACKEND MODULE
+    
+    This module is the backend of the application. It contains the main
+    application and the blueprints for the backend.
+    
+    Attributes:
+        bcrypt (Bcrypt): Bcrypt object for hashing passwords.
+        jwt (JWTManager): JWTManager object for managing JWTs.
+        app (Flask): Flask application object.
+"""
+
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
