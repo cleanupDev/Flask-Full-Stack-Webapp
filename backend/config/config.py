@@ -23,33 +23,23 @@ class UnittestConfig(Config):
     logging.basicConfig(level=logging.DEBUG)
     logging.info("Backend running in unittest mode")
 
+    _backend_env = dotenv_values("backend/config/backend.env")
+
     DEBUG = True
 
-    DB_HOST = dotenv_values("backend/config/backend.env").get(
-        "DB_HOST"
-    ) or os.environ.get("DB_HOST")
+    DB_HOST = _backend_env.get("DB_HOST") or os.environ.get("DB_HOST")
 
-    DB_USER = dotenv_values("backend/config/backend.env").get(
-        "DB_USER"
-    ) or os.environ.get("DB_USER")
+    DB_USER = _backend_env.get("DB_USER") or os.environ.get("DB_USER")
 
-    DB_PASSWORD = dotenv_values("backend/config/backend.env").get(
-        "DB_PASSWORD"
-    ) or os.environ.get("DB_PASSWORD")
+    DB_PASSWORD = _backend_env.get("DB_PASSWORD") or os.environ.get("DB_PASSWORD")
 
-    DB_NAME = dotenv_values("backend/config/backend.env").get(
-        "DB_NAME"
-    ) or os.environ.get("DB_NAME")
+    DB_NAME = _backend_env.get("DB_NAME") or os.environ.get("DB_NAME")
 
-    HOST = dotenv_values("backend/config/backend.env").get("HOST") or os.environ.get(
-        "HOST"
-    )
+    HOST = _backend_env.get("HOST") or os.environ.get("HOST")
 
-    PORT = dotenv_values("backend/config/backend.env").get("PORT") or os.environ.get(
-        "PORT"
-    )
+    PORT = _backend_env.get("PORT") or os.environ.get("PORT")
 
-    # CORS_ORIGINS = dotenv_values("backend/config/backend.env").get("CORS_ORIGINS")
+    # CORS_ORIGINS = _backend_env.get("CORS_ORIGINS")
 
     def connection(self):
         try:
@@ -67,34 +57,24 @@ class DevelopmentConfig(Config):
     logging.basicConfig(level=logging.DEBUG)
     logging.info("Backend running in development mode")
 
+    _backend_env = dotenv_values("backend/config/backend.env")
+
     DEBUG = True
 
     # Either use .env file or environment variables in docker container
-    DB_HOST = dotenv_values("backend/config/backend.env").get(
-        "DB_HOST"
-    ) or os.environ.get("DB_HOST")
+    DB_HOST = _backend_env.get("DB_HOST") or os.environ.get("DB_HOST")
 
-    DB_USER = dotenv_values("backend/config/backend.env").get(
-        "DB_USER"
-    ) or os.environ.get("DB_USER")
+    DB_USER = _backend_env.get("DB_USER") or os.environ.get("DB_USER")
 
-    DB_PASSWORD = dotenv_values("backend/config/backend.env").get(
-        "DB_PASSWORD"
-    ) or os.environ.get("DB_PASSWORD")
+    DB_PASSWORD = _backend_env.get("DB_PASSWORD") or os.environ.get("DB_PASSWORD")
 
-    DB_NAME = dotenv_values("backend/config/backend.env").get(
-        "DB_NAME"
-    ) or os.environ.get("DB_NAME")
+    DB_NAME = _backend_env.get("DB_NAME") or os.environ.get("DB_NAME")
 
-    HOST = dotenv_values("backend/config/backend.env").get("HOST") or os.environ.get(
-        "HOST"
-    )
+    HOST = _backend_env.get("HOST") or os.environ.get("HOST")
 
-    PORT = dotenv_values("backend/config/backend.env").get("PORT") or os.environ.get(
-        "PORT"
-    )
+    PORT = _backend_env.get("PORT") or os.environ.get("PORT")
 
-    # CORS_ORIGINS = dotenv_values("backend/config/backend.env").get("CORS_ORIGINS")
+    # CORS_ORIGINS = _backend_env.get("CORS_ORIGINS")
 
     def connection(self):
         try:
