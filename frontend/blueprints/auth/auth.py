@@ -1,11 +1,16 @@
+import os
+import requests
+
+from dotenv import dotenv_values
+
 from flask import Blueprint, jsonify, request, render_template, session
 from flask_login import login_user, login_required, logout_user
 from frontend.handlers import remove_user_from_cache
 from models import User
-import requests
-from dotenv import dotenv_values
 
-BACKEND_URL = dotenv_values("frontend/config/frontend.env").get("BACKEND_URL")
+BACKEND_URL = dotenv_values("frontend/config/frontend.env").get(
+    "BACKEND_URL"
+) or os.environ.get("BACKEND_URL")
 
 auth_bp = Blueprint("auth", __name__, template_folder="templates")
 

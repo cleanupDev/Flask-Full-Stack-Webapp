@@ -25,7 +25,8 @@ jwt.init_app(app)
 app.config.from_object(get_config())
 CORS(app, origins=app.config["CORS_ORIGINS"])
 
-from backend.blueprints import auth_bp, admin_bp
+from backend.blueprints import index_bp, auth_bp, admin_bp
 
-app.register_blueprint(admin_bp)
-app.register_blueprint(auth_bp)
+app.register_blueprint(index_bp, url_prefix="/")
+app.register_blueprint(admin_bp, url_prefix="/admin")
+app.register_blueprint(auth_bp, url_prefix="/auth")
