@@ -22,7 +22,6 @@ def init_db():
                             is_active BOOLEAN NOT NULL,
                             is_admin BOOLEAN NOT NULL,
                             is_verified BOOLEAN NOT NULL,
-                            is_authenticated BOOLEAN NOT NULL
                        )"""
         )
 

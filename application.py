@@ -1,18 +1,25 @@
+import argparse
 import backend
 import frontend
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
+parser = argparse.ArgumentParser(description="Run the application.")
 
-STACK = os.environ.get("STACK")
+parser.add_argument(
+    "-st",
+    "--stack",
+    help="Which stack to run. Options are 'frontend' or 'backend'.",
+    type=str,
+    required=True,
+)
 
-if STACK == "frontend":
+args = parser.parse_args()
+
+if args.stack == "frontend":
     app = frontend.app
-elif STACK == "backend":
+elif args.stack == "backend":
     app = backend.app
 else:
-    raise Exception("STACK environment variable not set")
+    raise Exception("Invalid stack argument. Options are 'frontend' or 'backend'.")
 
 
 if __name__ == "__main__":

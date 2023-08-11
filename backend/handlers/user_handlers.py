@@ -34,7 +34,6 @@ def login_user(user: User):
                     is_active=result[7],
                     is_admin=result[8],
                     is_verified=result[9],
-                    is_authenticated=result[10],
                 )
 
                 logging.debug("User logged in successfully")
@@ -143,7 +142,7 @@ def register_user(user: User):
             logging.debug("Inserting user into database")
             cursor.execute(
                 """
-                            INSERT INTO users (id, username, password, email, first_name, last_name, created_at, is_active, is_admin, is_verified, is_authenticated)
+                            INSERT INTO users (id, username, password, email, first_name, last_name, created_at, is_active, is_admin, is_verified)
                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                                 """,
                 (
@@ -157,7 +156,6 @@ def register_user(user: User):
                     user.is_active,
                     user.is_admin,
                     user.is_verified,
-                    user.is_authenticated,
                 ),
             )
 
@@ -208,7 +206,7 @@ def get_user_by_id(user_id: str):
                         "data": User(
                             id=result[0],
                             username=result[1],
-                            # password=result[2],
+                            # ? password=result[2],
                             email=result[3],
                             first_name=result[4],
                             last_name=result[5],
@@ -216,7 +214,6 @@ def get_user_by_id(user_id: str):
                             is_active=result[7],
                             is_admin=result[8],
                             is_verified=result[9],
-                            is_authenticated=result[10],
                         ).to_dict(),
                     }
                 ),

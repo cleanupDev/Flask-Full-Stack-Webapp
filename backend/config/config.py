@@ -1,4 +1,3 @@
-import pyodbc
 import mysql.connector as mysql
 from dotenv import dotenv_values
 from azure.identity import DefaultAzureCredential
@@ -18,20 +17,40 @@ class Config:
     HOST = "localhost"
     PORT = 5001
     CORS_ORIGINS = ["http://localhost:5000", "http://localhost:5001"]
-    
+
 
 class UnittestConfig(Config):
     logging.basicConfig(level=logging.DEBUG)
     logging.info("Backend running in unittest mode")
+
     DEBUG = True
-    DB_HOST = dotenv_values("backend/config/backend.env").get("DB_HOST") or os.environ.get("DB_HOST")
-    DB_USER = dotenv_values("backend/config/backend.env").get("DB_USER") or os.environ.get("DB_USER")
-    DB_PASSWORD = dotenv_values("backend/config/backend.env").get("DB_PASSWORD") or os.environ.get("DB_PASSWORD")
-    DB_NAME = dotenv_values("backend/config/backend.env").get("DB_NAME") or os.environ.get("DB_NAME")
-    HOST = dotenv_values("backend/config/backend.env").get("HOST") or os.environ.get("HOST")
-    PORT = dotenv_values("backend/config/backend.env").get("PORT") or os.environ.get("PORT")
+
+    DB_HOST = dotenv_values("backend/config/backend.env").get(
+        "DB_HOST"
+    ) or os.environ.get("DB_HOST")
+
+    DB_USER = dotenv_values("backend/config/backend.env").get(
+        "DB_USER"
+    ) or os.environ.get("DB_USER")
+
+    DB_PASSWORD = dotenv_values("backend/config/backend.env").get(
+        "DB_PASSWORD"
+    ) or os.environ.get("DB_PASSWORD")
+
+    DB_NAME = dotenv_values("backend/config/backend.env").get(
+        "DB_NAME"
+    ) or os.environ.get("DB_NAME")
+
+    HOST = dotenv_values("backend/config/backend.env").get("HOST") or os.environ.get(
+        "HOST"
+    )
+
+    PORT = dotenv_values("backend/config/backend.env").get("PORT") or os.environ.get(
+        "PORT"
+    )
+
     # CORS_ORIGINS = dotenv_values("backend/config/backend.env").get("CORS_ORIGINS")
-    
+
     def connection(self):
         try:
             return mysql.connect(
@@ -47,16 +66,36 @@ class UnittestConfig(Config):
 class DevelopmentConfig(Config):
     logging.basicConfig(level=logging.DEBUG)
     logging.info("Backend running in development mode")
+
     DEBUG = True
+
     # Either use .env file or environment variables in docker container
-    DB_HOST = dotenv_values("backend/config/backend.env").get("DB_HOST") or os.environ.get("DB_HOST")
-    DB_USER = dotenv_values("backend/config/backend.env").get("DB_USER") or os.environ.get("DB_USER")
-    DB_PASSWORD = dotenv_values("backend/config/backend.env").get("DB_PASSWORD") or os.environ.get("DB_PASSWORD")
-    DB_NAME = dotenv_values("backend/config/backend.env").get("DB_NAME") or os.environ.get("DB_NAME")
-    HOST = dotenv_values("backend/config/backend.env").get("HOST") or os.environ.get("HOST")
-    PORT = dotenv_values("backend/config/backend.env").get("PORT") or os.environ.get("PORT")
+    DB_HOST = dotenv_values("backend/config/backend.env").get(
+        "DB_HOST"
+    ) or os.environ.get("DB_HOST")
+
+    DB_USER = dotenv_values("backend/config/backend.env").get(
+        "DB_USER"
+    ) or os.environ.get("DB_USER")
+
+    DB_PASSWORD = dotenv_values("backend/config/backend.env").get(
+        "DB_PASSWORD"
+    ) or os.environ.get("DB_PASSWORD")
+
+    DB_NAME = dotenv_values("backend/config/backend.env").get(
+        "DB_NAME"
+    ) or os.environ.get("DB_NAME")
+
+    HOST = dotenv_values("backend/config/backend.env").get("HOST") or os.environ.get(
+        "HOST"
+    )
+
+    PORT = dotenv_values("backend/config/backend.env").get("PORT") or os.environ.get(
+        "PORT"
+    )
+
     # CORS_ORIGINS = dotenv_values("backend/config/backend.env").get("CORS_ORIGINS")
-    
+
     def connection(self):
         try:
             return mysql.connect(
@@ -81,16 +120,25 @@ class ProductionConfig(Config):
             key_vault_url = os.environ.get(
                 "KEY_VAULT_URL", Exception("Environment variable not set")
             )
+
             secret_client = SecretClient(vault_url=key_vault_url, credential=credential)
 
-            connection_string = secret_client.get_secret("CONNECTION_STRING").value
+            HOST = secret_client.get_secret("DB_HOST").value
+            PORT = secret_client.get_secret("DB_PORT").value
+            USER = secret_client.get_secret("DB_USER").value
+            PASSWORD = secret_client.get_secret("DB_PASSWORD").value
+            DATABASE = secret_client.get_secret("DB_NAME").value
 
-            conn = pyodbc.connect(connection_string, autocommit=True, timeout=30)
+            conn = mysql.connect(
+                host=HOST, port=PORT, user=USER, password=PASSWORD, database=DATABASE
+            )
 
             return conn
 
-        except ResourceNotFoundError:
-            raise Exception("Connection string not found in key vault")
+        except ResourceNotFoundError as e:
+            raise Exception(
+                "Error connecting to database: " + str(e) + " - " + str(e.message)
+            )
 
         except Exception as e:
             raise Exception("Error connecting to database: " + str(e))
