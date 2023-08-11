@@ -11,7 +11,7 @@ admin_bp = Blueprint("config", __name__)
 
 @admin_bp.route("/", methods=["GET"])
 def index():
-    return jsonify({"status": "success", "message": "Admin blueprint"}), 200
+    return jsonify({"status": "success", "message": "Admin Index"}), 200
 
 
 @admin_bp.route("/ping", methods=["GET"])

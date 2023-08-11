@@ -4,36 +4,82 @@
 
 ## Description
 
-This is template for a full-stack web application built with Flask. The application consists of separate frontend and backend Flask apps, with a MySQL database running in a Docker container. The project utilizes JWT (JSON Web Tokens) and CORS (Cross-Origin Resource Sharing) for authentication and security. Passwords are hashed using Flask-Bcrypt, and Flask-Login is used for frontend user authentication.
+This is template for a full-stack web application built with Flask. The application consists of separate frontend and backend Flask apps, with a MySQL database running in a Docker container. The project utilizes JWT (JSON Web Tokens) for authentication and security. Passwords are hashed using Flask-Bcrypt, and Flask-Login is used for frontend user authentication.
 
 ## Table of Contents
 
+* [Technologies](#technologies)
 * [Installation](#installation)
 * [Usage](#usage)
 * [License](#license)
 
-## Installation
+## Technologies
 
-To install the necessary dependencies, run the following command:
+* [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+  * [Flask-Bcrypt](https://flask-bcrypt.readthedocs.io/en/latest/)
+  * [Flask-Login](https://flask-login.readthedocs.io/en/latest/)
 
-```bash
-pip install -r requirements.txt
-```
+* [MySQL](https://www.mysql.com/)
+* [Docker](https://www.docker.com/)
+* [Docker Compose](https://docs.docker.com/compose/)
 
-To set up the environment variables, create files named `backend.env` and `frontend.env` in the `backend` and `frontend` directories, respectively. The contents of the files should be as the template files `backend.env.template` and `frontend.env.template`, respectively.
+## Installation and Usage
 
-## Usage
+### Docker
 
-MySQL database is run in a Docker container. To run the database, run the following command:
+The Full Stack App can be run in Docker containers. Install Docker and Docker Compose, then run the following command:
 
 ```bash
 docker compose up -d
 ```
 
-TODO
+### Local
 
-Visit `http://localhost:5000` in your browser to view the application.
-The backend API is available at `http://localhost:5001`.
+To run the Full Stack App locally, first clone the repository:
+
+```bash
+git clone https://github.com/cleanupDev/Flask-Full-Stack-Webapp.git
+```
+
+A virtual environment is recommended.
+
+```bash
+python -m venv .venv
+```
+
+Activate the virtual environment based on your platform and install the necessary dependencies with the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+To set up the environment variables, create files named `backend.env` and `frontend.env` in the `backend/config` and `frontend/config` directories, respectively. The contents of the files should be as the template files `backend.env.template` and `frontend.env.template`.
+
+MySQL database is run in a Docker container. To run the database, run the following command:
+
+```bash
+docker compose up -d mysql
+```
+
+To run the backend Flask app, run the following command:
+
+```bash
+python application.py --stack backend
+```
+
+To run the frontend Flask app, run the following command:
+
+```bash
+python application.py --stack frontend
+```
+
+## Documentation
+
+Route documentation is available in the `docs/` directory.
+
+[Backend Routes Documentation](docs/backend.md)
+
+[Frontend Routes Documentation](docs/frontend.md)
 
 ## License
 
