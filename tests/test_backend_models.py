@@ -19,7 +19,7 @@ class TestModels(unittest.TestCase):
             created_at="2021-01-01",
             is_active=True,
             is_admin=False,
-            is_verified=True,
+            is_authenticated=True,
         )
 
     def tearDown(self):
@@ -39,7 +39,7 @@ class TestModels(unittest.TestCase):
                 "created_at": "2021-01-01",
                 "is_active": True,
                 "is_admin": False,
-                "is_verified": True,
+                "is_authenticated": True,
             },
         )
 

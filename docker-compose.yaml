@@ -1,5 +1,9 @@
 version: "0.0.1"
 
+networks:
+  app-net:
+    driver: bridge
+
 services:
   mysql:
     image: mysql
@@ -14,6 +18,8 @@ services:
       - 3306:3306
     volumes:
       - .data/mysql:/var/lib/mysql
+    networks:
+      - app-net
 
   adminer:
     image: adminer
@@ -21,3 +27,37 @@ services:
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - app-net
+
+  backend:
+    build: .
+    container_name: backend
+    command: python application.py --stack backend
+    restart: always
+    env_file:
+      - backend/config/backend.env
+    ports:
+      - 5001:5001
+    volumes:
+      - .:/app
+    depends_on:
+      - mysql
+    networks:
+      - app-net
+
+  frontend:
+    build: .
+    container_name: frontend
+    command: python application.py --stack frontend
+    restart: always
+    env_file:
+      - frontend/config/frontend.env
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    depends_on:
+      - backend
+    networks:
+      - app-net

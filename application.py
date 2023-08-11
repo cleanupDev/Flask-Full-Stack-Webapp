@@ -15,9 +15,9 @@ parser.add_argument(
 args = parser.parse_args()
 
 if args.stack == "frontend":
-    app = frontend.app
+    app = frontend.create_app()
 elif args.stack == "backend":
-    app = backend.app
+    app = backend.create_app()
 else:
     raise Exception("Invalid stack argument. Options are 'frontend' or 'backend'.")
 

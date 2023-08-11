@@ -20,8 +20,9 @@ class Config:
 
 
 class UnittestConfig(Config):
-    logging.basicConfig(level=logging.DEBUG)
-    logging.info("Backend running in unittest mode")
+    def setup_logging(self):
+        logging.basicConfig(level=logging.DEBUG)
+        logging.info("Backend running in unittest mode")
 
     _backend_env = dotenv_values("backend/config/backend.env")
 
@@ -54,8 +55,9 @@ class UnittestConfig(Config):
 
 
 class DevelopmentConfig(Config):
-    logging.basicConfig(level=logging.DEBUG)
-    logging.info("Backend running in development mode")
+    def setup_logging(self):
+        logging.basicConfig(level=logging.DEBUG)
+        logging.info("Backend running in development mode")
 
     _backend_env = dotenv_values("backend/config/backend.env")
 
@@ -78,6 +80,9 @@ class DevelopmentConfig(Config):
 
     def connection(self):
         try:
+            logging.info(
+                f"Connecting to database: {self.DB_HOST}, {self.DB_USER}, {self.DB_PASSWORD}, {self.DB_NAME}"
+            )
             return mysql.connect(
                 host=self.DB_HOST,
                 user=self.DB_USER,
@@ -89,8 +94,10 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Backend running in production mode")
+    def setup_logging(self):
+        logging.basicConfig(level=logging.INFO)
+        logging.info("Backend running in production mode")
+
     SECRET_KEY = os.environ.get("SECRET_KEY")
 
     def connection(self):

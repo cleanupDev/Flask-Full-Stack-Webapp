@@ -3,7 +3,16 @@ import requests
 
 from dotenv import dotenv_values
 
-from flask import Blueprint, jsonify, request, render_template, session
+from flask import (
+    Blueprint,
+    jsonify,
+    request,
+    render_template,
+    session,
+    flash,
+    redirect,
+    url_for,
+)
 from flask_login import login_user, login_required, logout_user
 from frontend.handlers import remove_user_from_cache
 from models import User
@@ -22,7 +31,7 @@ def login():
     elif request.method == "POST":
         user = User(**request.form.to_dict())
         login_response = requests.post(
-            BACKEND_URL + "/login", json={"data": user.to_dict()}
+            BACKEND_URL + "/auth/login", json={"data": user.to_dict()}
         )
 
         if login_response.status_code == 200:
@@ -53,10 +62,9 @@ def logout():
     remove_user_from_cache()
     logout_user()
     session.pop("access_token", None)
-    return (
-        jsonify({"status": "success", "message": "User logged out successfully"}),
-        200,
-    )
+    flash("User logged out successfully", "success")
+
+    return redirect(url_for("auth.login"))
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -66,7 +74,7 @@ def register():
     elif request.method == "POST":
         user = User(**request.form.to_dict())
         register_response = requests.post(
-            BACKEND_URL + "/register", json={"data": user.to_dict()}
+            BACKEND_URL + "/auth/register", json={"data": user.to_dict()}
         )
 
         if register_response.status_code == 201:

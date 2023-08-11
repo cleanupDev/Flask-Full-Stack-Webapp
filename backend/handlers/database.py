@@ -21,30 +21,36 @@ def init_db():
                             created_at DATETIME NOT NULL,
                             is_active BOOLEAN NOT NULL,
                             is_admin BOOLEAN NOT NULL,
-                            is_verified BOOLEAN NOT NULL,
+                            is_authenticated BOOLEAN NOT NULL
                        )"""
         )
 
         conn.commit()
 
         logging.info("Database initialized successfully")
-        return jsonify(
-            {
-                "status": "success",
-                "message": "Database initialized successfully",
-                "data": None,
-            }
-        ), 200
+        return (
+            jsonify(
+                {
+                    "status": "success",
+                    "message": "Database initialized successfully",
+                    "data": None,
+                }
+            ),
+            200,
+        )
 
     except Exception as e:
         logging.error("Error initializing database: " + str(e))
-        return jsonify(
-            {
-                "status": "error",
-                "message": "Error initializing database: " + str(e),
-                "data": None,
-            }
-        ), 500
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Error initializing database: " + str(e),
+                    "data": None,
+                }
+            ),
+            500,
+        )
 
     finally:
         conn.close()

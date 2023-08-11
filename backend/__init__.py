@@ -18,15 +18,21 @@ from backend.config import get_config
 bcrypt = Bcrypt()
 jwt = JWTManager()
 
-app = Flask(__name__)
 
-bcrypt.init_app(app)
-jwt.init_app(app)
-app.config.from_object(get_config())
-CORS(app, origins=app.config["CORS_ORIGINS"])
+def create_app():
+    app = Flask(__name__)
 
-from backend.blueprints import index_bp, auth_bp, admin_bp
+    bcrypt.init_app(app)
+    jwt.init_app(app)
+    config = get_config()
+    config.setup_logging()
+    app.config.from_object(config)
+    CORS(app, origins=app.config["CORS_ORIGINS"])
 
-app.register_blueprint(index_bp, url_prefix="/")
-app.register_blueprint(admin_bp, url_prefix="/admin")
-app.register_blueprint(auth_bp, url_prefix="/auth")
+    from backend.blueprints import index_bp, auth_bp, admin_bp
+
+    app.register_blueprint(index_bp)
+    app.register_blueprint(admin_bp, url_prefix="/admin")
+    app.register_blueprint(auth_bp, url_prefix="/auth")
+
+    return app

@@ -29,7 +29,7 @@ def load_user(user_id):
 def _load_fresh_user(user_id):
     access_token = session.get("access_token", None)
     user_response = requests.get(
-        BACKEND_URL + "/user", headers={"Authorization": f"Bearer {access_token}"}
+        BACKEND_URL + "/auth/user", headers={"Authorization": f"Bearer {access_token}"}
     )
     if user_response.status_code == 200:
         user = User(**user_response.json()["data"])

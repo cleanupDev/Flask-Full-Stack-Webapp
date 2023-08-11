@@ -12,8 +12,9 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    logging.basicConfig(level=logging.DEBUG)
-    logging.info("Frontend running in development mode")
+    def setup_logging(self):
+        logging.basicConfig(level=logging.DEBUG)
+        logging.info("Frontend running in development mode")
 
     _frontend_env = dotenv_values("frontend/config/frontend.env")
 
@@ -28,8 +29,10 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Frontend running in production mode")
+    def setup_logging(self):
+        logging.basicConfig(level=logging.INFO)
+        logging.info("Frontend running in production mode")
+
     DEBUG = False
     HOST = os.environ.get("HOST")
     PORT = os.environ.get("PORT")
