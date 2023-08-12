@@ -1,3 +1,4 @@
+import os
 import argparse
 import backend
 import frontend
@@ -9,14 +10,20 @@ parser.add_argument(
     "--stack",
     help="Which stack to run. Options are 'frontend' or 'backend'.",
     type=str,
-    required=True,
+    required=False,
 )
 
 args = parser.parse_args()
 
-if args.stack == "frontend":
+if args.stack:
+    stack = args.stack
+else:
+    stack = os.environ.get("STACK")
+
+
+if stack == "frontend":
     app = frontend.create_app()
-elif args.stack == "backend":
+elif stack == "backend":
     app = backend.create_app()
 else:
     raise Exception("Invalid stack argument. Options are 'frontend' or 'backend'.")
